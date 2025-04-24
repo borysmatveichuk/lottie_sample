@@ -43,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   final _random = Random();
   late int _currentLottieFileIdx;
+  late bool _isAnimating;
 
   @override
   void initState() {
@@ -54,6 +55,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       vsync: this,
       duration: Duration(seconds: 3),
     )..repeat();
+    _isAnimating = true;
   }
 
   @override
@@ -86,20 +88,20 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  _controller.isAnimating ? 'STOP' : 'START',
+                  _isAnimating ? 'STOP' : 'START',
                   style: TextStyle(fontSize: 20),
                 ),
               ),
               onPressed: () {
                 if (_controller.isAnimating) {
                   _controller.stop(canceled: true);
+                  _isAnimating = false;
                 } else {
-                  setState(() {
-                    _currentLottieFileIdx = _random.nextInt(_lottieFiles.length);
-                  });
-
+                  _currentLottieFileIdx = _random.nextInt(_lottieFiles.length);
                   _controller.repeat();
+                  _isAnimating = true;
                 }
+                setState(() {});
               },
             ),
           ],
